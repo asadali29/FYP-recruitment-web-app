@@ -33,10 +33,6 @@ export const ProfileImageProvider = ({ children }) => {
     localStorage.setItem("name", name);
   };
 
-  //   const updateProfileImage = (imageUrl) => {
-  //     setProfileImage(imageUrl);
-  //   };
-
   return (
     <ProfileImageContext.Provider
       value={{ profileImage, userName, updateProfileImage, updateUserName }}

@@ -18,38 +18,10 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname);
-    // const ext = path.extname(file.originalname);
-    // const filename = "profile_picture" + ext; // You can customize the filename as needed
-    // cb(null, filename);
   },
 });
 
 const upload = multer({ storage: storage });
-
-// // Middleware to compress image using sharp
-// const compressImage = async (req, res, next) => {
-//   if (!req.file) {
-//     return next();
-//   }
-
-//   const filePath = req.file.path;
-//   const compressedFilePath = path.join(
-//     __dirname,
-//     "../uploads",
-//     req.user.userId,
-//     "compressed", // Create a compressed folder inside the user's folder
-//     req.file.filename
-//   );
-
-//   try {
-//     await sharp(filePath).toFile(compressedFilePath);
-//     req.compressedFilePath = compressedFilePath; // Store the compressed file path in the request object
-//     next();
-//   } catch (error) {
-//     console.error("Error compressing image:", error);
-//     next(error);
-//   }
-// };
 
 const compressImage = async (req, res, next) => {
   if (!req.file) {
@@ -86,16 +58,4 @@ const compressImage = async (req, res, next) => {
   }
 };
 
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, "uploads/"); // Destination folder for uploaded files
-//   },
-//   filename: function (req, file, cb) {
-//     cb(null, file.originalname); // Use original filename
-//   },
-// });
-
-// const upload = multer({ storage: storage });
-
 module.exports = { upload, compressImage };
-// module.exports = upload;

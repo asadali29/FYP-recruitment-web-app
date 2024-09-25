@@ -25,7 +25,8 @@ export default function Contact() {
     validateContactForm();
 
     try {
-      await axios.post("http://localhost:3001/contact", formData);
+      // await axios.post("http://localhost:3001/contact", formData);
+      await axios.post("/api/contact", formData);
       console.log("Email sent successfully");
       // Reset form data to empty
       setFormData({

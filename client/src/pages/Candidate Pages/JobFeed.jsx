@@ -3,7 +3,6 @@ import axios from "axios";
 import moment from "moment";
 import { Country, City } from "country-state-city";
 import { Link } from "react-router-dom";
-// import JobDetail from "./JobDetail";
 
 const JobFeed = () => {
   const [jobPosts, setJobPosts] = useState([]);
@@ -15,8 +14,6 @@ const JobFeed = () => {
   const [countries, setCountries] = useState([]);
   const [citiesInCountry, setCitiesInCountry] = useState([]);
   const [userId, setUserId] = useState("");
-  //   const [selectedJobId, setSelectedJobId] = useState(null);
-  //   const [showJobDetail, setShowJobDetail] = useState(false);
 
   useEffect(() => {
     // Fetch all job posts initially
@@ -28,14 +25,12 @@ const JobFeed = () => {
     setUserId(storedUserId);
   }, []);
 
-  //   useEffect(() => {
-  //     console.log("selectedJobId:", selectedJobId);
-  //   }, [selectedJobId]);
-
   const fetchJobPosts = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:3001/job-posts", {
+      // const response = await axios.get("http://192.168.1.101:3001/job-posts", {
+      // const response = await axios.get("http://localhost:3001/job-posts", {
+      const response = await axios.get("/api/job-posts", {
         headers: {
           Authorization: token,
         },
@@ -109,15 +104,6 @@ const JobFeed = () => {
     setFilteredJobPosts(jobPosts); // Reset filtered job posts to all job posts
   };
 
-  //   useEffect(() => {
-  //     console.log("use effect id:", selectedJobId);
-  //   }, [selectedJobId]);
-
-  //   const handleJobClick = (jobId) => {
-  //     console.log("this is job id:", jobId);
-  //     setSelectedJobId(jobId);
-  //   };
-
   return (
     <div className="job-feed-container">
       <h2 className="job-feed-title">
@@ -184,7 +170,6 @@ const JobFeed = () => {
             to={`/dashboard/job-detail/${job._id}`}
             key={job._id}
             className="job-feed-job-card"
-            // onClick={() => handleJobClick(job._id)}
           >
             <h3>{job.title}</h3>
             <p className="job-feed-company">
@@ -206,20 +191,15 @@ const JobFeed = () => {
               }}
             ></p>
             <p className="job-feed-date">{formatPostedDate(job.datePosted)}</p>
-            {/* {job.applicants.includes(userId) ? ( */}
             {job.applicants.some((applicant) => applicant.userId === userId) ? (
               <div className="job-applied-indicator-feed">
                 <span>Applied</span>
                 <span>&#9989;</span>
-                {/* <img src={greenTickIcon} alt="Green tick" /> */}
               </div>
             ) : null}
           </Link>
-          //   </div>
         ))}
       </div>
-      {/* Job detail */}
-      {/* {selectedJobId && <JobDetail id={selectedJobId} />} */}
     </div>
   );
 };

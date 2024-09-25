@@ -7,13 +7,10 @@ import { useProfileImage } from "../components/ProfileImageContext";
 
 function Dashboard() {
   const [dashboardData, setDashboardData] = useState({});
-  // const [profileName, setProfileName] = useState("");
   const [profileRole, setProfileRole] = useState("");
   const [profileDataFetched, setProfileDataFetched] = useState(false);
   const { updateProfileImage, updateUserName, userName } = useProfileImage();
-  // const [profileImage, setProfileImage] = useState(""); // New state for profile image
   const token = localStorage.getItem("token");
-  // const [userType, setUserType] = useState("");
   const [typeOfUser, setTypeOfUser] = useState("");
   const { userType } = useParams();
   const location = useLocation();
@@ -28,7 +25,9 @@ function Dashboard() {
     // Fetch dashboard data
     if (location.pathname === "/dashboard") {
       axios
-        .get("http://localhost:3001/dashboard", {
+        // .get("http://192.168.1.101:3001/dashboard", {
+        // .get("http://localhost:3001/dashboard", {
+        .get("/api/dashboard", {
           headers: {
             Authorization: token,
           },
@@ -36,13 +35,10 @@ function Dashboard() {
         .then((response) => {
           console.log("Dashboard data:", response.data);
           setDashboardData(response.data);
-          // setUserType(response.data.role);
           localStorage.setItem("userType", response.data.role); // Save user type
           setTypeOfUser(response.data.role);
           localStorage.setItem("name", response.data.name); // Save username
           localStorage.setItem("userId", response.data.userId);
-          // const userType = response.data.role;
-          // console.log("User Type:", userType);
         })
         .catch((error) => {
           console.error("Error fetching dashboard data:", error);
@@ -51,53 +47,33 @@ function Dashboard() {
 
     // Fetch  user profile data
     axios
-      // .get("http://localhost:3001/dashboard", {
-      .get("http://localhost:3001/user-profile", {
+      // .get("http://192.168.1.101:3001/user-profile", {
+      // .get("http://localhost:3001/user-profile", {
+      .get("/api/user-profile", {
         headers: {
           Authorization: token,
         },
       })
       .then((response) => {
-        // console.log("Dashboard data:", response.data);
-        // setDashboardData(response.data);
         updateUserName(response.data.name);
-        // setProfileName(response.data.name);
         setProfileRole(response.data.role);
         updateProfileImage(response.data.profilePicture);
         setProfileDataFetched(true); // Set flag to true after fetching data
-        // setProfileImage(response.data.profilePicture); // Set profile image URL
-        // console.log("image url", response.data.profilePicture);
-        // console.log("image new url", profileImage);
       })
       .catch((error) => {
         console.error("Error fetching dashboard data:", error);
       });
   }, [token]);
 
-  // // Callback function to update profile image URL
-  // const updateProfileImage = (imageUrl) => {
-  //   setProfileImage(imageUrl);
-  // };
-
-  // // Render initial content only if the user is on the dashboard route
-  // const renderInitialContent = location.pathname === "/dashboard";
-
   // Render initial content only when necessary
   const renderInitialContent =
     location.pathname === "/dashboard" && !profileDataFetched && !typeOfUser;
-  // const renderInitialContent =
-  //   location.pathname === "/dashboard" && !profileDataFetched && !userType;
 
   useEffect(() => {
     const storedUserType = localStorage.getItem("userType");
     if (storedUserType) {
       setTypeOfUser(storedUserType);
     }
-
-    // const storedUsername = localStorage.getItem("name");
-    // if (storedUsername) {
-    //   setProfileName(storedUsername);
-    // }
   }, []);
 
   // Toggle function to show/hide FAQ answers
@@ -115,41 +91,18 @@ function Dashboard() {
     clickedAnswer.style.display =
       clickedAnswer.style.display === "none" ? "block" : "none";
   }
-  // function toggleAnswer(id) {
-  //   var answer = document.getElementById("faq-answer-" + id);
-  //   answer.style.display = answer.style.display === "none" ? "block" : "none";
-  // }
 
   return (
     <div className="dashboard">
-      {/* <DashboardNavbar profileName={profileName} profileRole={profileRole} /> */}
       <DashboardNavbar profileRole={profileRole} />
-      {/* <DashboardNavbar profileName={profileName} profileRole={profileRole} /> */}
-      {/* <DashboardNavbar
-        profileName={profileName}
-        profileRole={profileRole}
-        profileImage={profileImage} // Pass profile image URL to DashboardNavbar
-      /> */}
       <Sidebar userType={typeOfUser} />
-      {/* <Sidebar userType={userType} /> */}
       <div className="main-content">
-        {/* Render initial content only if no route active */}
-        {/* {!userType && <h1>Welcome, {dashboardData.username}!</h1>} */}
-        {/* <h1>Welcome, {dashboardData.username}!</h1> */}
-        {/* Render initial content only if profile data has not been fetched */}
-        {/* {!profileDataFetched && <h1>Welcome, {dashboardData.username}!</h1>} */}
-        {/* {renderInitialContent && !profileDataFetched && (
-          <h1>Welcome, {dashboardData.username}!</h1>
-        )} */}
-        {/* {renderInitialContent && <h1>Welcome, {dashboardData.username}!</h1>} */}
         {location.pathname === "/dashboard" && (
           <>
             {profileDataFetched ? (
               <>
                 <h2 className="dashboard-heading">
                   Hello, <span>{userName}!</span>
-                  {/* Hello, <span>{profileName}!</span> */}
-                  {/* Hello, <span>{dashboardData.name}!</span> */}
                 </h2>
                 <h1 className="dashboard-main-heading">
                   Welcome to Hireeaze - Simplifying Recruitment
@@ -264,11 +217,6 @@ function Dashboard() {
           </>
         )}
         <Outlet />
-        {/* <Outlet updateProfileImage={updateProfileImage} /> */}
-        {/* <h1>Welcome, {dashboardData}!</h1> */}
-        {/* <h2>{dashboardData.role}</h2> */}
-        {/* <h2>Dashboard Component</h2> */}
-        {/* <pre>{JSON.stringify(dashboardData, null, 2)}</pre> */}
       </div>
     </div>
   );

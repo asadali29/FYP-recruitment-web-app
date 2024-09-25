@@ -26,7 +26,8 @@ function Signup() {
     e.preventDefault();
     validateSignupForm();
     axios
-      .post("http://localhost:3001/register", {
+      // .post("http://localhost:3001/register", {
+      .post("/api/register", {
         name,
         username,
         email,

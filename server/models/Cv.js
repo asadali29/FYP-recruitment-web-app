@@ -51,11 +51,6 @@ const cvSchema = new mongoose.Schema({
       description: {
         type: String,
       },
-      // current: {
-      //   // New field to indicate if currently employed
-      //   type: Boolean,
-      //   default: false,
-      // },
     },
   ],
 
@@ -79,11 +74,6 @@ const cvSchema = new mongoose.Schema({
       endDate: {
         type: Date,
       },
-      // current: {
-      //   // New field to indicate if currently employed
-      //   type: Boolean,
-      //   default: false,
-      // },
     },
   ],
 

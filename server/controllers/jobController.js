@@ -9,7 +9,8 @@ const postJob = async (req, res) => {
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { title, description, jobType, salary, country, city } = req.body;
+    const { title, description, jobType, salary, country, city, postedBy } =
+      req.body;
 
     // Sanitize input
     const sanitizedDescription = sanitizeHtml(description);
@@ -23,6 +24,7 @@ const postJob = async (req, res) => {
       salary,
       country,
       city,
+      postedBy,
     });
 
     // Save the new job document to the database
@@ -55,8 +57,6 @@ const deleteJob = async (req, res) => {
     if (job.companyId !== req.user.companyId) {
       return res.status(403).json({ message: "Access forbidden" });
     }
-    // console.log("Found job:", job); // Log the job object
-    // await job.remove();
     await Job.deleteOne({ _id: req.params.id }); // Delete the job document
     res.json({ message: "Job deleted successfully" });
   } catch (error) {
@@ -69,7 +69,6 @@ const deleteJob = async (req, res) => {
 const updateJob = async (req, res) => {
   try {
     const { id } = req.params;
-    // const { title, description, requirements } = req.body;
     const { title, description, jobType, salary, country, city } = req.body;
 
     // Find the job by ID
@@ -90,12 +89,10 @@ const updateJob = async (req, res) => {
     // Update job fields
     job.title = title;
     job.description = sanitizedDescription;
-    // job.description = description;
     job.jobType = jobType;
     job.salary = salary;
     job.country = country;
     job.city = city;
-    // job.requirements = requirements;
 
     // Save the updated job
     await job.save();
@@ -124,30 +121,23 @@ const getJobById = async (req, res) => {
 // Function to handle job applications
 const applyForJob = async (req, res) => {
   try {
-    // const { userId } = req.user;
     const { userId, name } = req.user;
     const { id } = req.body;
-    // const { id, userId } = req.body;
     const job = await Job.findById(id);
     if (!job) {
       return res.status(404).json({ message: "Job not found" });
     }
-    // const hasApplied = false;
     // Check if the user has already applied for the job
     if (
       job.applicants.some((applicant) => applicant.userId.toString() === userId)
     ) {
-      // if (job.applicants.includes(userId)) {
       return res.status(400).json({
         message: "You have already applied for this job",
       });
     }
-    // Assuming applicants are stored as an array of user IDs
-    // job.applicants.push(id);
     // Increment the number of applicants
     job.numberOfApplicants += 1;
     job.applicants.push({ userId, name });
-    // job.applicants.push(userId);
     await job.save();
     res.json({
       message: "Application submitted successfully",

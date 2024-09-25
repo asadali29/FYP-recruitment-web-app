@@ -18,7 +18,9 @@ function Login() {
     e.preventDefault();
     validateLoginForm();
     axios
-      .post("http://localhost:3001/login", { email, password })
+      // .post("http://192.168.1.101:3001/login", { email, password })
+      // .post("http://localhost:3001/login", { email, password })
+      .post("/api/login", { email, password })
       .then((result) => {
         console.log(result);
         if (result.data.token) {
@@ -26,8 +28,6 @@ function Login() {
           removeSuccessFor();
           // Store the token in local storage
           localStorage.setItem("token", result.data.token);
-          // localStorage.setItem("userId", result.data.token.userId);
-          // localStorage.removeItem("profileImage");
           console.log("Token stored:", localStorage.getItem("token"));
           // Show the success popup
           setShowSuccessPopup(true);
@@ -35,16 +35,6 @@ function Login() {
             navigate("/dashboard");
           }, 3000);
         }
-
-        // if (result.data === "Success") {
-        //   // Remove inputs border color
-        //   removeSuccessFor();
-        //   // Show the success popup
-        //   setShowSuccessPopup(true);
-        //   setTimeout(() => {
-        //     navigate("/dashboard");
-        //   }, 3000);
-        // }
       })
       .catch((err) => console.log(err));
   };

@@ -1,5 +1,3 @@
-// Sidebar.jsx
-
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logoutIcon from "../assets/logout_icon.svg";
@@ -15,33 +13,23 @@ const Sidebar = ({ userType }) => {
   const handleViewCv = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:3001/dashboard", {
+      // const response = await axios.get("http://192.168.1.101:3001/dashboard", {
+      // const response = await axios.get("http://localhost:3001/dashboard", {
+      const response = await axios.get("/api/dashboard", {
         headers: { Authorization: token },
       });
       const userId = response.data.userId;
 
-      // const cvCheckResponse = await axios.get(
-      //   "http://localhost:3001/check-cv",
-      //   {
-      //     headers: { Authorization: token },
-      //     params: { userId },
-      //   }
-      // );
-
-      // if (cvCheckResponse.data.hasCV) {
       // If the candidate has a CV, fetch and set the CV data
-      const cvResponse = await axios.get(`http://localhost:3001/cv/${userId}`, {
+      // const cvResponse = await axios.get(
+      //   `http://192.168.1.101:3001/cv/${userId}`,
+      //   {
+      // const cvResponse = await axios.get(`http://localhost:3001/cv/${userId}`, {
+      const cvResponse = await axios.get(`/api/cv/${userId}`, {
         headers: { Authorization: token },
       });
       setCvData(cvResponse.data);
       setShowCvModal(true);
-      // }
-      // } else {
-      //   // If the candidate doesn't have a CV, display a message
-      //   alert("You haven't created a CV yet.");
-      //   // Alternatively, you can redirect the candidate to the create CV page
-      //   // navigate("/dashboard/create-cv");
-      // }
     } catch (error) {
       console.error("Error viewing CV:", error);
       setShowCvModal(true);
@@ -64,24 +52,16 @@ const Sidebar = ({ userType }) => {
   };
   return (
     <div className="sidebar">
-      {/* <h2> */}
       <Link to="/dashboard" className="sidebarDashboardLink">
         Dashboard
       </Link>
-      {/* </h2> */}
       <ul className="sidebarLinksArea">
-        {/* <CommonLinks handleLogout={handleLogout} /> */}
         {userType === "Candidate" && (
-          <CandidateLinks
-            handleViewCv={handleViewCv}
-            // cvData={cvData}
-            // handleCloseCvModal={handleCloseCvModal}
-          />
+          <CandidateLinks handleViewCv={handleViewCv} />
         )}
         {userType === "Company" && <CompanyLinks />}
         <CommonLinks handleLogout={handleLogout} />
       </ul>
-      {/* <CvModal cv={cvData} onClose={handleCloseCvModal} /> */}
       {showCvModal && <CvModal cv={cvData} onClose={handleCloseCvModal} />}
     </div>
   );
@@ -97,12 +77,9 @@ const CommonLinks = ({ handleLogout }) => (
       Logout
       <img src={logoutIcon} alt="logout" className="logout-icon" />
     </Link>
-    {/* <Link to="/common/link1">Common Link 1</Link>
-    <Link to="/common/link2">Common Link 2</Link> */}
   </>
 );
 
-// const CandidateLinks = ({ handleViewCv, cvData, handleCloseCvModal }) => (
 const CandidateLinks = ({ handleViewCv }) => (
   <>
     <Link to="/dashboard/create-cv" className="sidebarLink">
@@ -114,8 +91,15 @@ const CandidateLinks = ({ handleViewCv }) => (
     <Link to="/dashboard/job-feed" className="sidebarLink">
       Job Feed &#10170;
     </Link>
-
-    {/* <CvModal cv={cvData} onClose={handleCloseCvModal} /> */}
+    <Link to="/dashboard/scheduled-interviews" className="sidebarLink">
+      Interviews &#10170;
+    </Link>
+    {/* <Link to="/dashboard/test-assessment" className="sidebarLink">
+      Interview Tests &#10170;
+    </Link> */}
+    <Link to="/dashboard/interview-test-list" className="sidebarLink">
+      Interview Tests &#10170;
+    </Link>
   </>
 );
 
@@ -126,6 +110,15 @@ const CompanyLinks = () => (
     </Link>
     <Link to="/dashboard/manage-job-posts" className="sidebarLink">
       Manage Jobs &#10170;
+    </Link>
+    <Link to="/dashboard/company-scheduled-interviews" className="sidebarLink">
+      Scheduled Interviews &#10170;
+    </Link>
+    <Link to="/dashboard/create-test" className="sidebarLink">
+      Create Tests &#10170;
+    </Link>
+    <Link to="/dashboard/manage-tests" className="sidebarLink">
+      Manage Tests &#10170;
     </Link>
   </>
 );

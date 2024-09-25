@@ -1,5 +1,3 @@
-// MouseAnimation.jsx
-
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
@@ -9,7 +7,7 @@ const MouseAnimation = () => {
   useEffect(() => {
     // Exclude any route that starts with "/dashboard"
     if (!location.pathname.startsWith("/dashboard")) {
-      // Your existing animation code goes here
+      // existing animation code goes here
       const colors = ["#6fcbff"];
       const circles = Array.from({ length: 20 }, (_, index) => {
         const circle = document.createElement("div");

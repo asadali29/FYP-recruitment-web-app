@@ -18,12 +18,28 @@ const {
   applyForJob,
   getJobById,
 } = require("../controllers/jobController");
-// const { toggleSelection } = require("../controllers/applicationController");
 const {
   toggleSelection,
   getSelectedApplicants,
 } = require("../controllers/applicationController");
-// const upload = require("../middleware/upload");
+const {
+  scheduleInterview,
+  updateInterview,
+  rescheduleInterview,
+  getInterviewDetails,
+  getCandidateInterviews,
+  getCompanyInterviews,
+} = require("../controllers/interviewController");
+const {
+  createTest,
+  deleteTest,
+  assignTest,
+  getTestsListForCandidate,
+  getTestForCandidate,
+  evaluateCode,
+  getAllTests,
+  generateReport,
+} = require("../controllers/testController");
 const path = require("path");
 const UserModel = require("../models/User");
 const router = express.Router();
@@ -135,7 +151,6 @@ router.put(
 router.get("/job-details/:id", getJobById);
 
 // Endpoint to handle job applications
-// router.post("/job-details/apply", applyForJob);
 router.post("/job-details/apply", verifyToken, applyForJob);
 
 // Toggle selection status
@@ -144,7 +159,50 @@ router.patch("/toggle-selection", verifyToken, toggleSelection);
 // Get selected applicants
 router.get("/selected-applicants/:jobId", verifyToken, getSelectedApplicants);
 
-// Toggle selection status
-// router.patch("/api/toggle-selection/:userId", toggleSelection);
+// Schedule Interview
+router.post("/schedule-interview", verifyToken, scheduleInterview);
+
+// Update Interview
+router.patch("/update-interview", verifyToken, updateInterview);
+
+// Reschedule Interview
+router.patch("/reschedule-interview", verifyToken, rescheduleInterview);
+
+// Get candidate interviews
+router.get("/candidate-interviews", verifyToken, getCandidateInterviews);
+
+// Fetch Interview Details
+router.get(
+  "/interview-details/:jobId/:userId",
+  verifyToken,
+  getInterviewDetails
+);
+
+// Get company interviews
+router.get("/company-interviews", verifyToken, getCompanyInterviews);
+
+// Tests area
+router.post("/create-test", verifyToken, createTest);
+router.delete("/tests/:id", verifyToken, deleteTest);
+router.post("/assign-test", verifyToken, assignTest);
+router.get(
+  "/candidate-test/:candidateId",
+  verifyToken,
+  getTestsListForCandidate
+);
+router.get(
+  "/candidate-test-details/:candidateId",
+  verifyToken,
+  getTestForCandidate
+);
+router.post("/evaluate-test", verifyToken, evaluateCode);
+router.get("/tests", verifyToken, getAllTests);
+
+// Report
+router.get(
+  "/generate-report/:candidateId/:testId",
+  verifyToken,
+  generateReport
+);
 
 module.exports = router;

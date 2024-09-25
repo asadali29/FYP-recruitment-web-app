@@ -18,7 +18,6 @@ const CreateCV = () => {
         startDate: "",
         endDate: "",
         description: "",
-        // current: false,
       },
     ],
     education: [
@@ -28,7 +27,6 @@ const CreateCV = () => {
         fieldOfStudy: "",
         startDate: "",
         endDate: "",
-        // current: false,
       },
     ],
     skills: [""],
@@ -37,12 +35,9 @@ const CreateCV = () => {
 
   // Handle form input change
   const handleInputChange = (e, index, nestedField) => {
-    // const { name, value, type, checked } = e.target;
     const { name, value } = e.target;
     const updatedFormData = { ...formData };
-    // console.log(updatedFormData);
     if (nestedField) {
-      // updatedFormData[name][index][nestedField] = e.target[0]?.value;
       if (!updatedFormData[name]) {
         updatedFormData[name] = []; // Initialize the array if it doesn't exist
       }
@@ -53,32 +48,14 @@ const CreateCV = () => {
       if (name.startsWith("fluency-")) {
         const langIndex = parseInt(name.split("-")[1]);
         updatedFormData.languages[langIndex].fluency = value;
-      }
-      // if (type === "checkbox") {
-      //   updatedFormData[name][index][nestedField] = checked;
-      //   // Clear endDate if current is checked
-      //   if (checked) {
-      //     updatedFormData[name][index].endDate = "";
-      //   }
-      // } else {
-      //   updatedFormData[name][index][nestedField] = value;
-      // }
-      else {
+      } else {
         // Update other nested fields
         updatedFormData[name][index][nestedField] = value;
       }
-      // updatedFormData[name][nestedField] =
-      //   type === "checkbox" ? checked : value;
-      // updatedFormData[name][index][nestedField] = value;
     } else if (name === "skills") {
       updatedFormData.skills[index] = value;
-      // } else if (name.startsWith("fluency")) {
-      //   const langIndex = parseInt(name.split("-")[1]);
-      //   // console.log(langIndex);
-      //   updatedFormData.languages[langIndex].fluency = value;
     } else {
       updatedFormData[name] = value;
-      // updatedFormData[name] = type === "checkbox" ? e.target.checked : value;
     }
     console.log(updatedFormData);
     setFormData(updatedFormData);
@@ -86,32 +63,6 @@ const CreateCV = () => {
 
   // Handle adding/removing work experience, education, languages, skills fields
   const handleAddField = (fieldName) => {
-    // if (fieldName === "workExperience") {
-    //   // If adding work experience, initialize position field with an empty string
-    //   setFormData((prevFormData) => ({
-    //     ...prevFormData,
-    //     [fieldName]: [
-    //       ...prevFormData[fieldName],
-    //       {
-    //         company: "",
-    //         position: "",
-    //         startDate: "",
-    //         endDate: "",
-    //         description: "",
-    //         current: false,
-    //       },
-    //     ],
-    //   }));
-    // } else {
-    //   // For other fields, use existing logic
-    //   setFormData((prevFormData) => ({
-    //     ...prevFormData,
-    //     [fieldName]: [
-    //       ...prevFormData[fieldName],
-    //       fieldName === "languages" ? { language: "", fluency: "" } : "",
-    //     ],
-    //   }));
-    // }
     const newField =
       fieldName === "workExperience"
         ? {
@@ -154,7 +105,9 @@ const CreateCV = () => {
     try {
       const token = localStorage.getItem("token");
       // Fetch the user's ID from the server response
-      const response = await axios.get("http://localhost:3001/dashboard", {
+      // const response = await axios.get("http://192.168.1.101:3001/dashboard", {
+      // const response = await axios.get("http://localhost:3001/dashboard", {
+      const response = await axios.get("/api/dashboard", {
         headers: { Authorization: token },
       });
       const { userId } = response.data;
@@ -163,15 +116,12 @@ const CreateCV = () => {
       const formDataWithUserId = { ...formData, userId };
 
       const createCvResponse = await axios.post(
-        "http://localhost:3001/create-cv",
+        // "http://192.168.1.101:3001/create-cv",
+        // "http://localhost:3001/create-cv",
+        "/api/create-cv",
         formDataWithUserId
       );
-      // const response = await axios.post(
-      //   "http://localhost:3001/create-cv",
-      //   formData
-      // );
       console.log("CV created successfully:", createCvResponse.data);
-      // console.log("CV created successfully:", response.data);
       // Reset form after successful submission
       setFormData({
         firstName: "",
@@ -188,7 +138,6 @@ const CreateCV = () => {
             startDate: "",
             endDate: "",
             description: "",
-            // current: false,
           },
         ],
         education: [
@@ -198,7 +147,6 @@ const CreateCV = () => {
             fieldOfStudy: "",
             startDate: "",
             endDate: "",
-            // current: false,
           },
         ],
         skills: [""],
@@ -212,11 +160,6 @@ const CreateCV = () => {
       alert("Failed to create CV. Please try again.");
     }
   };
-
-  // Function to disable end date field if 'current' is checked
-  // const isEndDateDisabled = (fieldName, index) => {
-  //   return formData[fieldName][index].current;
-  // };
 
   return (
     <div className="createcv-cont">
@@ -378,20 +321,9 @@ const CreateCV = () => {
                   name="workExperience"
                   value={exp.endDate}
                   onChange={(e) => handleInputChange(e, index, "endDate")}
-                  // disabled={isEndDateDisabled("workExperience", index)}
                   className="createcv-input datepicker"
                 />
               </div>
-              {/* <div className="createcv-form-group">
-                <input
-                  type="checkbox"
-                  id={`current-${index}`}
-                  name={`current-${index}`}
-                  checked={exp.current}
-                  onChange={(e) => handleInputChange(e, index, "current")}
-                />
-                <label htmlFor={`current-${index}`}>Current</label>
-              </div> */}
               <div className="createcv-form-group">
                 <label
                   htmlFor={`description-${index}`}
@@ -506,20 +438,9 @@ const CreateCV = () => {
                   name="education"
                   value={edu.endDate}
                   onChange={(e) => handleInputChange(e, index, "endDate")}
-                  // disabled={isEndDateDisabled("education", index)}
                   className="createcv-input datepicker"
                 />
               </div>
-              {/* <div className="createcv-form-group">
-                <input
-                  type="checkbox"
-                  id={`current-${index}`}
-                  name={`current-${index}`}
-                  checked={edu.current}
-                  onChange={(e) => handleInputChange(e, index, "current")}
-                />
-                <label htmlFor={`current-${index}`}>Current</label>
-              </div> */}
             </div>
             <button
               type="button"

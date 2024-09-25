@@ -7,11 +7,6 @@ async function createCv(req, res) {
 
     // Create a new CV document using the CvModel
     const newCv = await CvModel.create({ ...cvData, userId });
-    // const cvData = req.body;
-    // console.log(cvData);
-
-    // Create a new CV document using the CvModel
-    // const newCv = await CvModel.create(cvData);
 
     // Return the newly created CV as JSON response
     res.status(201).json(newCv);
@@ -25,13 +20,9 @@ const checkCV = async (req, res) => {
   try {
     // Get the user ID from query parameters
     const userId = req.query.userId;
-    // console.log(userId);
 
     // Find the CV associated with the user ID
     const userCV = await CvModel.findOne({ userId: userId });
-    // const userCV = await CvModel.findOne({ userId: req.user.id });
-
-    // console.log(userCV);
 
     // Check if the user has a CV
     const hasCV = !!userCV;

@@ -24,11 +24,12 @@ const jobSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  postedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User", // Assuming the User model includes companies
+    required: true,
+  },
   applicants: [
-    // {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "User", // Reference to the User model for applicant IDs
-    // },
     {
       userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -42,6 +43,25 @@ const jobSchema = new mongoose.Schema({
       selected: {
         type: Boolean,
         default: false, // New field to indicate if the applicant is selected
+      },
+      interviewDate: {
+        type: Date,
+        default: null,
+      },
+      interviewStatus: {
+        type: String,
+        enum: [
+          "Scheduled",
+          "Completed",
+          "Cancelled",
+          "Not Scheduled",
+          "Rescheduled",
+        ],
+        default: "Not Scheduled",
+      },
+      completed: {
+        type: Boolean,
+        default: false,
       },
     },
   ],

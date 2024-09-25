@@ -17,15 +17,15 @@ import JobFeed from "./pages/Candidate Pages/JobFeed";
 import JobDetail from "./pages/Candidate Pages/JobDetail";
 import JobDetailWrapper from "./components/JobDetailWrapper";
 import ApplicantsPage from "./pages/Company Pages/ApplicantsPage";
-// import MouseAnimation from "./components/MouseAnimation";
+import ScheduledInterviews from "./pages/Candidate Pages/ScheduledInterviews";
+import CompanyScheduledInterviews from "./pages/Company Pages/CompanyScheduledInterviews";
+import VideoChat from "./pages/VideoChat";
+import CreateTest from "./pages/Company Pages/CreateTest";
+import ManageTests from "./pages/Company Pages/ManageTests";
+import TestAssessment from "./pages/Candidate Pages/TestAssessment";
+import TestList from "./pages/Candidate Pages/TestList";
 
 function App() {
-  // const [profileImage, setProfileImage] = useState(""); // Define state for profile image
-
-  // const updateProfileImage = (imageUrl) => {
-  //   setProfileImage(imageUrl); // Define function to update profile image
-  // };
-
   return (
     <>
       <ProfileImageProvider>
@@ -71,18 +71,27 @@ function App() {
             <Route path="job-feed" element={<JobFeed />} />
             <Route path="job-detail/:id" element={<JobDetailWrapper />} />
             <Route path="job/:jobId/applicants" element={<ApplicantsPage />} />
-            {/* <Route path="job-detail/:id" element={<JobDetail />} /> */}
-            {/* Pass updateProfileImage function to UserProfile */}
-            {/* <Route
-              path="user-profile"
-              element={<UserProfile updateProfileImage={updateProfileImage} />}
-            /> */}
+            <Route
+              path="scheduled-interviews"
+              element={<ScheduledInterviews />}
+            />
+            <Route
+              path="company-scheduled-interviews"
+              element={<CompanyScheduledInterviews />}
+            />
+            <Route
+              path="interview/:jobId/:candidateId"
+              element={<VideoChat />}
+            />
+            <Route path="create-test" element={<CreateTest />} />
+            <Route path="manage-tests" element={<ManageTests />} />
+            {/* <Route path="test-assessment" element={<TestAssessment />} /> */}
+            <Route path="interview-test-list" element={<TestList />} />
+            <Route
+              path="test-assessment/:testId"
+              element={<TestAssessment />}
+            />
           </Route>
-          {/* ProtectedRoute for the user profile */}
-          {/* <Route
-          path="/dashboard/user-profile"
-          element={<ProtectedRoute element={<UserProfile />} />}
-        /> */}
         </Routes>
       </ProfileImageProvider>
     </>

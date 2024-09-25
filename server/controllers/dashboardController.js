@@ -6,16 +6,12 @@ const updateUserData = async (req, res) => {
   try {
     const { userId } = req.user;
     let updateFields = { ...req.body };
-    // console.log(req.user);
 
     // Check if there is a file uploaded
     if (req.file) {
       // If a file is uploaded, update the profile picture field
       const profilePicturePath = `uploads/${userId}/compressed/${req.file.filename}`;
-      // const profilePicturePath = `uploads/${userId}/${req.file.filename}`;
       updateFields.profilePicture = profilePicturePath;
-      // updateFields.profilePicture = req.file.path.replace(/^.*[\\\/]/, ""); // Extract only the file name from the path
-      // updateFields.profilePicture = req.file.path;
 
       // Find the user by ID to get the old profile picture path
       const user = await UserModel.findById(userId);
@@ -42,7 +38,6 @@ const updateUserData = async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    // console.log("updated user data: ", updatedUser.dashboardData);
     res.json(updatedUser.dashboardData);
   } catch (error) {
     console.error("Error updating user data:", error);
